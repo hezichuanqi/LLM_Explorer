@@ -79,8 +79,8 @@ class LlamaRMSNorm(nn.Module):
 
     def forward(self, hidden_states):
         input_dtype = hidden_states.dtype
-        hidden_states = hidden_states.to(torch.float32)
-        variance = hidden_states.pow(2).mean(-1, keepdim=True)
+        hidden_states = hidden_states.to(torch.float32) #转换隐藏层张量的类型
+        variance = hidden_states.pow(2).mean(-1, keepdim=True) #计算隐藏层张量的方差
         hidden_states = hidden_states * torch.rsqrt(variance + self.variance_epsilon)
         return self.weight * hidden_states.to(input_dtype)
 
@@ -95,12 +95,13 @@ class LlamaRotaryEmbedding(nn.Module):
     def __init__(self, config: LlamaConfig, device=None):
         super().__init__()
         # BC: "rope_type" was originally "type"
+        #从配置文件获取ROPE的类型
         if hasattr(config, "rope_scaling") and config.rope_scaling is not None:
             self.rope_type = config.rope_scaling.get("rope_type", config.rope_scaling.get("type"))
         else:
             self.rope_type = "default"
-        self.max_seq_len_cached = config.max_position_embeddings
-        self.original_max_seq_len = config.max_position_embeddings
+        self.max_seq_len_cached = config.max_position_embeddings #缓存的最大序列长度
+        self.original_max_seq_len = config.max_position_embeddings#原始的最大序列长度
 
         self.config = config
         self.rope_init_fn = ROPE_INIT_FUNCTIONS[self.rope_type]
