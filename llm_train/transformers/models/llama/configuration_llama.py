@@ -161,10 +161,10 @@ class LlamaConfig(PretrainedConfig):
         self,
         vocab_size=32000,
         hidden_size=4096,
-        intermediate_size=11008,
-        num_hidden_layers=32,
-        num_attention_heads=32,
-        num_key_value_heads=None,
+        intermediate_size=11008,#多层感知机的维度
+        num_hidden_layers=32,#解码器中隐藏层的数量
+        num_attention_heads=32,#注意力机制中head的数量
+        num_key_value_heads=None,#决定用MHA,MQA还是GQA
         hidden_act="silu",
         max_position_embeddings=2048,
         initializer_range=0.02,
@@ -187,7 +187,7 @@ class LlamaConfig(PretrainedConfig):
         self.max_position_embeddings = max_position_embeddings
         self.hidden_size = hidden_size
         self.intermediate_size = intermediate_size
-        self.num_hidden_layers = num_hidden_layers
+        self.num_hidden_layers = num_hidden_layers #默认32
         self.num_attention_heads = num_attention_heads
 
         # for backward compatibility
